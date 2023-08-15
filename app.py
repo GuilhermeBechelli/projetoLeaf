@@ -9,7 +9,7 @@ app = Flask(__name__, static_folder=os.path.abspath('static/'))
 @app.route('/')
 def index():
     # Faz uma requisição GET para a API
-    response = requests.get('http://192.168.10.194:1890/verificados')
+    response = requests.get('xxxxxxxxxxxxxxxx')
     
     # Obtém os dados da resposta da API
     data = response.json()
