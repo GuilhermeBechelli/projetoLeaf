@@ -1,51 +1,66 @@
 <!DOCTYPE html>
-<html lang="PT-BR">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="static/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <script src="static/timer.js"></script>
-    <script src="static/linha.js"></script>
-   
+    <script src="/static/linha.js"></script>
+    <script src="/static/mouse.js"></script>
 
     <title>PSP API</title>
+
+
 </head>
+
 <body>
+
     <h1>ATRACAÇÕES PROGRAMADAS</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>DUV</th>
-                <th>Situação Geral</th>
-                <th>Anuência Marinha</th>
-                <th>Anuência Polícia</th>
-                <th>Registro</th>
-                <th>Atualização</th>
-                <th>Período</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in data %}
-            <tr onclick="marcarLinha(this)">
-                <td>{{ item.duv }}</td>
-                <td>
-                    {% if item.situacaoGeral %}
-                        <span class="check">&#x2713;</span>
-                    {% else %}
-                        <span class="cross">&#x2715;</span>
-                    {% endif %}
-                </td>
-                <td>{{ item.dthrAnuenciaMarinha }}</td>
-                <td>{{ item.dthrAnuenciaPolicia }}</td>
-                <td>{{ item.dthrRegistro }}</td>
-                <td>{{ item.dthrAtualizacao }}</td>
-                <td>{{ item.periodo }}</td> 
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
+    {% for group in data %}
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="7">{{ group.periodo }}</th>
+                </tr>
+                <tr>
+                    <th>Nome</th>
+                    <th>Local</th>
+                    <th>Carga</th>
+                    <th>Pendências</th>
+                    <th>Situação Geral</th>
+                    <th>DUV</th>
+                    <th>RAP</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for date_group in group.grupos_data %}
+                    <tr class="data-header"></tr>
+                    {% for item in date_group.itens %}
+                        <tr onclick="marcarLinha(this)">
+                            <td>{{ item.nome }}</td>
+                            <td>{{ item.local }}</td>
+                            <td>{{ item.carga }}</td>
+                            <td class="tendencia">{{ item.pendencias }}</td>
+                            <td class="situacao">
+                                {% if item.situacaoGeral %}
+                                    <span class="check">&#x2713;</span>
+                                {% else %}
+                                    <span class="cross">&#x2715;</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="copy-box" onclick="copyCode(event, '{{ item.duv }}')">
+                                  <i class="fas fa-copy"></i>
+                                </span>
+                                {{ item.duv }}
+                            </td>
+                            <td>{{ item.rap }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
 </body>
 </html>
